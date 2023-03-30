@@ -1,0 +1,10 @@
+* {
+    padding: 0;
+    margin-left:  4px;
+    box-sizing: border-box;
+    font-family: Serif;
+}
+button, input {
+    padding: 2px;
+    margin: 2px;
+}
