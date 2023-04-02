@@ -1,16 +1,18 @@
 import React from 'react';
-import loginService from '../services/loginService'
+import loginService from '../services/logins'
 import blogService from '../services/blogs'
+import Notification from "./Notification";
+import {useState} from "react";
 
 
 const LoginForm = ({
-                       password,
-                       setPassword,
-                       username,
-                       setUsername,
                        setUser,
-    setToken
+                       message,
+                       setMessage,
                    }) => {
+    const [password, setPassword] = useState('')
+    const [username, setUsername] = useState('')
+
 
     const handleLogin = async (e) => {
         e.preventDefault()
@@ -20,17 +22,24 @@ const LoginForm = ({
 
             blogService.setToken(user.token)
             setUser(user)
-            setPassword('')
-            setUsername('')
+
 
         } catch (error) {
-            console.error(error.name, error.message)
+            setMessage('wrong username or password')
+            setTimeout(() => {
+                setMessage(null)
+            }, 3000)
+            console.error(error.message)
+        } finally {
+            setPassword('')
+            setUsername('')
         }
     }
     return (
         <div>
             <div>
                 <h2>log in to application</h2>
+                <Notification message={message}/>
             </div>
             <form onSubmit={handleLogin}>
                 <div>

@@ -1,24 +1,35 @@
 import blogService from '../services/blogs'
+import {useState} from "react";
 
-const CreateBlog = ({
-                        title,
-                        author,
-                        url,
-                        setAuthor,
-                        setTitle,
-                        setUrl,
+const BlogForm = ({
+                        blogFormRef,
                         setBlogs,
-                        blogs
+                        blogs,
+                        setMessage
                     }) => {
+    const [title, setTitle] = useState('')
+    const [author, setAuthor] = useState('')
+    const [url, setUrl] = useState('')
+
     const handleCreateBlog = async (e) => {
         e.preventDefault()
+        try {
+            blogFormRef.current.toggleVisibility()
+            const newObj = {title, author, url}
+            const response = await blogService.create(newObj)
+            setBlogs([...blogs, response])
+            setMessage(`a new blog ${response.title} by ${response.author} added`)
+            setTimeout(() => setMessage(null), 3000)
+        } catch (error) {
 
-        const newObj = {title, author, url}
-        const response = await blogService.create(newObj)
-        setBlogs([...blogs, response])
-        setTitle('')
-        setAuthor('')
-        setUrl('')
+            setMessage(`title and url are required`)
+            setTimeout(() => setMessage(null), 3000)
+        } finally {
+
+            setTitle('')
+            setAuthor('')
+            setUrl('')
+        }
     }
 
     return (
@@ -60,4 +71,4 @@ const CreateBlog = ({
     );
 };
 
-export default CreateBlog;
+export default BlogForm;

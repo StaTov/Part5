@@ -1,7 +1,8 @@
 import React from 'react';
 import Blog from "./Blog";
+import Notification from "./Notification";
 
-const BlogsContent = ({blogs, user, setUser}) => {
+const BlogsContent = ({blogs, user, setUser, message}) => {
   const handleClick = () => {
         window.localStorage.removeItem('loggedBlogappUser')
       setUser(null)
@@ -10,6 +11,7 @@ const BlogsContent = ({blogs, user, setUser}) => {
     return (
         <div>
             <h2>blogs</h2>
+            <Notification message={message}/>
             <div>
                 {user.name} logged in
                 <button
@@ -17,7 +19,10 @@ const BlogsContent = ({blogs, user, setUser}) => {
                     type="button">logout</button>
             </div>
             {blogs.map(blog =>
-                <Blog key={blog.id} blog={blog}/>
+                <Blog key={blog.id}
+                      blog={blog}
+                      user={user}
+                />
             )}
         </div>
     );

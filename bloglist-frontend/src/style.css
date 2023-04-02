@@ -1,10 +1,19 @@
 * {
     padding: 0;
-    margin-left:  4px;
+    margin-left: 4px;
     box-sizing: border-box;
     font-family: Serif;
 }
+
 button, input {
     padding: 2px;
     margin: 2px;
+}
+
+.error {
+
+    text-align: center;
+    margin: 3px;
+    padding: 3px;
+    border: teal solid 1px;
 }

@@ -1,18 +1,17 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useRef} from 'react'
 import './style.css'
 import blogService from './services/blogs'
 import LoginForm from "./components/LoginForm";
 import BlogsContent from "./components/BlogsContent";
-import CreateBlog from "./components/CreateBlog";
+import BlogForm from "./components/BlogForm";
+import Togglable from "./components/Togglable";
+
 
 const App = () => {
     const [blogs, setBlogs] = useState([])
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
     const [user, setUser] = useState(null)
-    const [title, setTitle] = useState('')
-    const [author, setAuthor] = useState('')
-    const [url, setUrl] = useState('')
+    const [message, setMessage] = useState(null)
+    const blogFormRef = useRef()
 
     useEffect(() => {
         blogService.getAll().then(blogs =>
@@ -26,6 +25,7 @@ const App = () => {
             .getItem('loggedBlogappUser')
         if (loggedUserJSON) {
             const user = JSON.parse(loggedUserJSON)
+            blogService.setToken(user.token)
             setUser(user)
         }
     }, [])
@@ -34,27 +34,27 @@ const App = () => {
         <div>
             {user === null
                 ? <LoginForm
-                    password={password}
-                    setPassword={setPassword}
-                    username={username}
-                    setUsername={setUsername}
                     setUser={setUser}
-                                   />
+                    message={message}
+                    setMessage={setMessage}
+                />
                 : <div>
-                    <CreateBlog
-                        blogs={blogs}
-                        setBlogs={setBlogs}
-                        title={title}
-                        author={author}
-                        url={url}
-                        setTitle={setTitle}
-                        setAuthor={setAuthor}
-                        setUrl={setUrl}
-                    />
+                    <Togglable
+                        buttonLable="New blog"
+                        ref={blogFormRef}>
+                        <BlogForm
+                            blogFormRef={blogFormRef}
+                            blogs={blogs}
+                            setBlogs={setBlogs}
+                            message={message}
+                            setMessage={setMessage}
+                        />
+                    </Togglable>
                     <BlogsContent
                         blogs={blogs}
                         user={user}
                         setUser={setUser}
+                        message={message}
                     />
                 </div>}
         </div>
