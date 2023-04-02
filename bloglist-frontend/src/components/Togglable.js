@@ -1,11 +1,16 @@
 import React from 'react';
 import {useState, forwardRef, useImperativeHandle} from "react";
+import PropTypes from "prop-types";
 
 const Togglable = forwardRef((props,refs) => {
     const [visible, setVisible] = useState(false)
 
     const showWhenVisible = {display: visible ? 'none' : ''}
     const hideWhenVisible = {display: visible ? '' : 'none'}
+
+    Togglable.propTypes = {
+        buttonLable: PropTypes.string.isRequired
+    }
     const toggleVisibility = () => {
         setVisible(!visible)
     }

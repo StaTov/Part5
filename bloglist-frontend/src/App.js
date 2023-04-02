@@ -15,8 +15,8 @@ const App = () => {
 
     useEffect(() => {
         blogService.getAll().then(blogs =>
-            setBlogs(blogs)
-        )
+            setBlogs([...blogs].sort((a, b) => {return (b.likes - a.likes)}
+        )))
     }, [])
 
     useEffect(() => {
@@ -51,6 +51,7 @@ const App = () => {
                         />
                     </Togglable>
                     <BlogsContent
+                        setBlogs={setBlogs}
                         blogs={blogs}
                         user={user}
                         setUser={setUser}

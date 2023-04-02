@@ -2,10 +2,10 @@ import React from 'react';
 import Blog from "./Blog";
 import Notification from "./Notification";
 
-const BlogsContent = ({blogs, user, setUser, message}) => {
-  const handleClick = () => {
+const BlogsContent = ({blogs, setBlogs, user, setUser, message}) => {
+    const handleClick = () => {
         window.localStorage.removeItem('loggedBlogappUser')
-      setUser(null)
+        setUser(null)
     }
 
     return (
@@ -19,9 +19,12 @@ const BlogsContent = ({blogs, user, setUser, message}) => {
                     type="button">logout</button>
             </div>
             {blogs.map(blog =>
-                <Blog key={blog.id}
-                      blog={blog}
-                      user={user}
+                <Blog
+                    blogs={blogs}
+                    setBlogs={setBlogs}
+                    key={blog.id}
+                    blog={blog}
+                    user={user}
                 />
             )}
         </div>
