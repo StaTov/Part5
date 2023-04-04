@@ -1,39 +1,25 @@
-import blogService from '../services/blogs'
 import {useState} from "react";
 
-const BlogForm = ({
-                      blogFormRef,
-                      setBlogs,
-                      blogs,
-                      setMessage
-                  }) => {
+const BlogForm = ({addBlog}) => {
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')
     const [url, setUrl] = useState('')
 
-    const handleCreateBlog = async (e) => {
+    const handleChangeTitle = ({target}) => {
+        setTitle(target.value)
+    }
+    const handleChangeAuthor = ({target}) => {
+        setAuthor(target.value)
+    }
+    const handleChangeUrl = ({target}) => {
+        setUrl(target.value)
+    }
+    const handleCreateBlog = (e) => {
         e.preventDefault()
-        try {
-            blogFormRef.current.toggleVisibility()
-            const newObj = {title, author, url}
-
-            const response = await blogService.create(newObj)
-            const newBlog = await blogService.getOne(response.id)
-
-            setBlogs([...blogs, newBlog])
-
-            setMessage(`a new blog ${response.title} by ${response.author} added`)
-            setTimeout(() => setMessage(null), 3000)
-        } catch (error) {
-
-            setMessage(`title and url are required`)
-            setTimeout(() => setMessage(null), 3000)
-        } finally {
-
-            setTitle('')
-            setAuthor('')
-            setUrl('')
-        }
+        addBlog({title, author, url})
+        setTitle('')
+        setAuthor('')
+        setUrl('')
     }
 
     return (
@@ -44,27 +30,21 @@ const BlogForm = ({
                     title:
                     <input
                         value={title}
-                        onChange={({target}) => {
-                            setTitle(target.value)
-                        }}
+                        onChange={handleChangeTitle}
                         type="text"/>
                 </div>
                 <div>
                     author:
                     <input
                         value={author}
-                        onChange={({target}) => {
-                            setAuthor(target.value)
-                        }}
+                        onChange={handleChangeAuthor}
                         type="text"/>
                 </div>
                 <div>
                     url:
                     <input
                         value={url}
-                        onChange={({target}) => {
-                            setUrl(target.value)
-                        }}
+                        onChange={handleChangeUrl}
                         type="text"/>
                 </div>
                 <div>

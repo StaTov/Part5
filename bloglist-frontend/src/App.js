@@ -5,6 +5,7 @@ import LoginForm from "./components/LoginForm";
 import BlogsContent from "./components/BlogsContent";
 import BlogForm from "./components/BlogForm";
 import Togglable from "./components/Togglable";
+import Notification from "./components/Notification";
 
 
 const App = () => {
@@ -15,8 +16,10 @@ const App = () => {
 
     useEffect(() => {
         blogService.getAll().then(blogs =>
-            setBlogs([...blogs].sort((a, b) => {return (b.likes - a.likes)}
-        )))
+            setBlogs([...blogs].sort((a, b) => {
+                    return (b.likes - a.likes)
+                }
+            )))
     }, [])
 
     useEffect(() => {
@@ -29,7 +32,26 @@ const App = () => {
             setUser(user)
         }
     }, [])
+    const handleClickLogout = () => {
+        window.localStorage.removeItem('loggedBlogappUser')
+        setUser(null)
+    }
+    const addBlog = async (blogObj) => {
+        try {
+            blogFormRef.current.toggleVisibility()
 
+            const response = await blogService.create(blogObj)
+            const newBlog = await blogService.getOne(response.id)
+            setBlogs([...blogs, newBlog])
+
+            setMessage(`a new blog ${response.title} by ${response.author} added`)
+            setTimeout(() => setMessage(null), 3000)
+        } catch (error) {
+
+            setMessage(`title and url are required`)
+            setTimeout(() => setMessage(null), 3000)
+        }
+    }
     const handleLikeAdd = async (blog) => {
         const newObj = {
             title: blog.title,
@@ -51,14 +73,12 @@ const App = () => {
         if (!window.confirm(`Remove blog ${blog.title} gonna need it! by ${user.name}`)) {
             return
         }
-
         try {
             await blogService.remove(blog.id)
             setBlogs(blogs.filter(b => b.id !== blog.id))
         } catch (error) {
             console.error(error.message)
         }
-
     }
     return (
         <div>
@@ -72,23 +92,19 @@ const App = () => {
                     <Togglable
                         buttonLable="New blog"
                         ref={blogFormRef}>
-                        <BlogForm
-                            blogFormRef={blogFormRef}
-                            blogs={blogs}
-                            setBlogs={setBlogs}
-                            message={message}
-                            setMessage={setMessage}
-                        />
+                        <BlogForm addBlog={addBlog}/>
                     </Togglable>
                     <BlogsContent
                         setBlogs={setBlogs}
                         blogs={blogs}
                         user={user}
-                        setUser={setUser}
                         message={message}
+                        handleClickLogout={handleClickLogout}
                         handleLikeAdd={handleLikeAdd}
                         handleDeleteBlog={handleDeleteBlog}
-                    />
+                    >
+                        <Notification message={message}/>
+                    </BlogsContent>
                 </div>}
         </div>
     )

@@ -1,24 +1,19 @@
 import React from 'react';
 import Blog from "./Blog";
-import Notification from "./Notification";
+
 
 const BlogsContent = ({
+                          children,
                           blogs,
                           user,
-                          setUser,
-                          message,
                           handleDeleteBlog,
-                          handleLikeAdd
+                          handleLikeAdd,
+                          handleClickLogout
                       }) => {
-    const handleClickLogout = () => {
-        window.localStorage.removeItem('loggedBlogappUser')
-        setUser(null)
-    }
-
     return (
         <div>
             <h2>blogs</h2>
-            <Notification message={message}/>
+            {children}
             <div>
                 {user.name} logged in
                 <button
