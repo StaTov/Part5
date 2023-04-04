@@ -1,7 +1,7 @@
 import {useState} from "react";
 
 
-const Blog = ({blog, user,handleDeleteBlog, handleLikeAdd}) => {
+const Blog = ({blog, user, handleDeleteBlog, handleLikeAdd}) => {
     const [visible, setVisible] = useState(false)
     const handleVisibility = () => {
         setVisible(!visible)
@@ -14,7 +14,7 @@ const Blog = ({blog, user,handleDeleteBlog, handleLikeAdd}) => {
         marginBottom: 5
     }
 
-     return (
+    return (
         <div style={blogStyle}>
             <div className="firstInfo">
                 {blog.title} {blog.author}
