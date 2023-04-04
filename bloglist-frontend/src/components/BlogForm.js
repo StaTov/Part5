@@ -2,11 +2,11 @@ import blogService from '../services/blogs'
 import {useState} from "react";
 
 const BlogForm = ({
-                        blogFormRef,
-                        setBlogs,
-                        blogs,
-                        setMessage
-                    }) => {
+                      blogFormRef,
+                      setBlogs,
+                      blogs,
+                      setMessage
+                  }) => {
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')
     const [url, setUrl] = useState('')
@@ -16,8 +16,12 @@ const BlogForm = ({
         try {
             blogFormRef.current.toggleVisibility()
             const newObj = {title, author, url}
+
             const response = await blogService.create(newObj)
-            setBlogs([...blogs, response])
+            const newBlog = await blogService.getOne(response.id)
+
+            setBlogs([...blogs, newBlog])
+
             setMessage(`a new blog ${response.title} by ${response.author} added`)
             setTimeout(() => setMessage(null), 3000)
         } catch (error) {

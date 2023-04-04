@@ -1,7 +1,7 @@
 import {useState} from "react";
-import blogServices from '../services/blogs'
 
-const Blog = ({blog, blogs, user, setBlogs}) => {
+
+const Blog = ({blog, user,handleDeleteBlog, handleLikeAdd}) => {
     const [visible, setVisible] = useState(false)
     const handleVisibility = () => {
         setVisible(!visible)
@@ -13,39 +13,10 @@ const Blog = ({blog, blogs, user, setBlogs}) => {
         borderWidth: 1,
         marginBottom: 5
     }
-    const handleDelete = async () => {
-        if (!window.confirm(`Remove blog ${blog.title} gonna need it! by ${user.name}`)) {
-            return
-        }
 
-        try {
-            await blogServices.remove(blog.id)
-            setBlogs(blogs.filter(b => b.id !== blog.id))
-        } catch (error) {
-            console.error(error.message)
-        }
-
-    }
-    const handleLike = async () => {
-        const newObj = {
-            title: blog.title,
-            url: blog.url,
-            user: user.id,
-            likes: blog.likes + 1
-        }
-        try {
-            const response = await blogServices.update(blog.id, newObj)
-            setBlogs([...blogs].map(b =>
-                (b.id === response.id ? response : b)
-            ))
-        } catch (error) {
-            console.error(error.message)
-        }
-    }
-
-    return (
+     return (
         <div style={blogStyle}>
-            <div>
+            <div className="firstInfo">
                 {blog.title} {blog.author}
                 <button
                     type="button"
@@ -53,14 +24,14 @@ const Blog = ({blog, blogs, user, setBlogs}) => {
                     {visible ? 'hide' : 'view'}
                 </button>
             </div>
-            <div>
+            <div className="secondInfo">
                 {visible
                     ? <div>
                         <div>URL: {blog.url}</div>
                         <div>likes: {blog.likes}
                             <button
                                 type="button"
-                                onClick={handleLike}
+                                onClick={() => handleLikeAdd(blog)}
                             >like
                             </button>
                         </div>
@@ -68,7 +39,7 @@ const Blog = ({blog, blogs, user, setBlogs}) => {
                         <div>{blog.user[0].username === user.username &&
                             <button
                                 type="submit"
-                                onClick={handleDelete}>
+                                onClick={() => handleDeleteBlog(blog, user)}>
                                 remove
                             </button>}
                         </div>

@@ -30,6 +30,36 @@ const App = () => {
         }
     }, [])
 
+    const handleLikeAdd = async (blog) => {
+        const newObj = {
+            title: blog.title,
+            url: blog.url,
+            user: user.id,
+            likes: blog.likes + 1
+        }
+        try {
+            const response = await blogService.update(blog.id, newObj)
+            const newBlog = await blogService.getOne(response.id)
+            setBlogs([...blogs].map(b =>
+                (b.id === response.id ? newBlog : b)
+            ))
+        } catch (error) {
+            console.error(error.message)
+        }
+    }
+    const handleDeleteBlog = async (blog, user) => {
+        if (!window.confirm(`Remove blog ${blog.title} gonna need it! by ${user.name}`)) {
+            return
+        }
+
+        try {
+            await blogService.remove(blog.id)
+            setBlogs(blogs.filter(b => b.id !== blog.id))
+        } catch (error) {
+            console.error(error.message)
+        }
+
+    }
     return (
         <div>
             {user === null
@@ -56,6 +86,8 @@ const App = () => {
                         user={user}
                         setUser={setUser}
                         message={message}
+                        handleLikeAdd={handleLikeAdd}
+                        handleDeleteBlog={handleDeleteBlog}
                     />
                 </div>}
         </div>
