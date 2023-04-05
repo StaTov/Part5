@@ -81,7 +81,7 @@ describe('<Blog/>', () => {
             await userOne.click(button)
             expect(mockHandler.mock.calls).toHaveLength(2)
         })
-        test('')
+
     })
 
 })
