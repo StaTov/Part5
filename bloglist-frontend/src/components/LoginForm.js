@@ -1,70 +1,56 @@
 import React from 'react';
-import loginService from '../services/logins'
-import blogService from '../services/blogs'
-import Notification from "./Notification";
 import {useState} from "react";
 
 
 const LoginForm = ({
-                       setUser,
-                       message,
-                       setMessage,
+                       children,
+                       setAuthorization,
                    }) => {
     const [password, setPassword] = useState('')
     const [username, setUsername] = useState('')
 
-
-    const handleLogin = async (e) => {
+    const handlePassword = ({target}) => setPassword(target.value)
+    const handleUsername = ({target}) => setUsername(target.value)
+    const handleLogin = (e) => {
         e.preventDefault()
-        try {
-            const user = await loginService.login({username, password})
-            window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
-
-            blogService.setToken(user.token)
-            setUser(user)
-
-
-        } catch (error) {
-            setMessage('wrong username or password')
-            setTimeout(() => {
-                setMessage(null)
-            }, 3000)
-            console.error(error.message)
-        } finally {
-            setPassword('')
-            setUsername('')
-        }
+        setAuthorization({username, password})
+        setPassword('')
+        setUsername('')
     }
+
     return (
         <div>
             <div>
                 <h2>log in to application</h2>
-                <Notification message={message}/>
+                {children}
             </div>
             <form onSubmit={handleLogin}>
                 <div>
                     username
                     <input
+                        id="username"
                         value={username}
                         name="Username"
                         type="text"
-                        onChange={({target}) => {
-                            setUsername(target.value)
-
-                        }}
+                        onChange={handleUsername}
                     />
                 </div>
                 <div>
                     password
                     <input
+                        id="password"
                         type="password"
                         value={password}
                         name="Password"
-                        onChange={({target}) => setPassword(target.value)}
+                        onChange={handlePassword}
                     />
                 </div>
                 <div>
-                    <button type="submit">login</button>
+                    <button
+                        id="login-button"
+                        type="submit">
+                        login
+                    </button>
                 </div>
             </form>
         </div>

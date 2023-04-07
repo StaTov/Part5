@@ -10,10 +10,16 @@ button, input {
     margin: 2px;
 }
 
-.error {
-
+.success{
     text-align: center;
+    border: green solid 1px;
     margin: 3px;
     padding: 3px;
-    border: teal solid 1px;
+}
+.error {
+    text-align: center;
+    border: red solid 1px;
+    margin: 3px;
+    padding: 3px;
+
 }
