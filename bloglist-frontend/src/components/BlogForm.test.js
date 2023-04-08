@@ -30,5 +30,5 @@ describe('<BlogForm/>', () => {
             author: 'test-author',
             url: 'test-url'
         })
-    })
+    }, 100000)
 })

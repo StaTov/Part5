@@ -15,7 +15,7 @@ const Blog = ({blog, user, handleDeleteBlog, handleLikeAdd}) => {
     }
 
     return (
-        <div style={blogStyle}>
+        <div className="blog" style={blogStyle}>
             <div className="firstInfo">
                 {blog.title} {blog.author}
                 <button
